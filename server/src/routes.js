@@ -25,15 +25,19 @@ module.exports = (app) => {
     app.post('/login',UserAuthenController.login)
 
 
-
+    // get all short
     app.get('/shorts',ShortController.index),
 
+    // create short
     app.post('/short',ShortController.create),
 
+    // edit short
     app.put('/short/:shortId', ShortController.put)
 
+    // delete short
     app.delete('/short/:shortId',ShortController.remove)
-
+    
+    // get short by id
     app.get('/short/:shortId',ShortController.show)
 
 }
