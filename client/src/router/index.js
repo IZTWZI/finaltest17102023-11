@@ -7,12 +7,19 @@ import UserCreate from '@/components/Users/CreateUser'
 import UserEdit from '@/components/Users/EditUser'
 import UserShow from '@/components/Users/ShowUser'
 
+import UserEdittest1 from '@/components/Users/EditUsertest1'
+
 import Login from '@/components/Login'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/test1',
+      name: 'test1',
+      component: UserEdittest1
+    },
     {
       path: '/users',
       name: 'users',
