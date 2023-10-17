@@ -3,19 +3,19 @@ module.exports = {
   // get all user
   async index(req, res) {
     try {
-      const users = await Short.findAll();
-      res.send(users);
+      const shorts = await Short.findAll();
+      res.send(shorts);
     } catch (err) {
       res.status(500).send({
-        error: "The users information was incorrect",
+        error: "The shorts information was incorrect",
       });
     }
   },
   // create user
   async create(req, res) {
     try {
-      const user = await Short.create(req.body);
-      res.send(user.toJSON());
+      const short = await Short.create(req.body);
+      res.send(short.toJSON());
     } catch (err) {
       res.status(500).send({
         error: "Create user incorrect",
@@ -27,7 +27,7 @@ module.exports = {
     try {
       await Short.update(req.body, {
         where: {
-          id: req.params.userId,
+          id: req.params.shortId,
         },
       });
       res.send(req.body);
@@ -40,20 +40,20 @@ module.exports = {
   // delete user
   async remove(req, res) {
     try {
-      const user = await Short.findOne({
+      const short = await Short.findOne({
         where: {
-          id: req.params.userId,
+          id: req.params.shortId,
         },
       });
 
-      if (!user) {
+      if (!short) {
         return res.status(403).send({
           error: "The Short information was incorrect",
         });
       }
 
-      await user.destroy();
-      res.send(user);
+      await short.destroy();
+      res.send(short);
     } catch (err) {
       res.status(500).send({
         error: "The Short information was incorrect",
@@ -64,8 +64,8 @@ module.exports = {
   // get user by id
   async show(req, res) {
     try {
-      const user = await Short.findByPk(req.params.userId);
-      res.send(user);
+      const short = await Short.findByPk(req.params.shortId);
+      res.send(short);
     } catch (err) {}
   },
 };

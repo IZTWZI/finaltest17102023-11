@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const Short = sequelize.define('Short', {
     Length: DataTypes.STRING,
     Material: DataTypes.STRING,
     Color: DataTypes.STRING,
@@ -7,6 +7,6 @@ module.exports = (sequelize, DataTypes) => {
     Brand: DataTypes.STRING,
     Price: DataTypes.STRING
   },)
-  User.associate = function (models) { }
-  return User
+  Short.associate = function (models) { }
+  return Short
 }
