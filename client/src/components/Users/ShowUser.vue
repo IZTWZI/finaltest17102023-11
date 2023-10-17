@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <h1>Get User Bt Id</h1>
+            <h1>Get User By Id</h1>
             <p>User ID: {{ user.id }}</p>
             <p>ชื่อ-นามสกุล: {{ user.name }} - {{ user.lastname }}</p>
             <p>email: {{ user.email }}</p>
