@@ -1,14 +1,23 @@
 <template>
-    <div>
-        <h1>User Login</h1>
-        <form v-on:submit.prevent="onLogin">
-            <p>Username: <input type="text" v-model="email" /></p>
-            <p>Password: <input type="password" v-model="password" /></p>
-            <p><button type="submit">Login</button></p>
-            <div class="error" v-if="error">{{error}}</div>
+    <div class="login-container">
+      <div class="login-form">
+        <h1 class="login-heading">Admin Login</h1>
+        <form v-on:submit.prevent="onLogin" class="form">
+          <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" v-model="email" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" v-model="password" class="form-input" required>
+          </div>
+          <button type="submit" class="login-button">Login</button>
+          <div class="error" v-if="error">{{error}}</div>
         </form>
+      </div>
     </div>
 </template>
+
 <script>
 import AuthenService from '@/services/AuthenService'
 export default {
@@ -45,8 +54,59 @@ export default {
 }
 </script>
 
+
 <style scoped>
- .error {
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+}
+
+.login-heading {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.login-button {
+  width: 100%;
+  background: #007bff;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-button:hover {
+  background: #0056b3;
+}
+
+.error {
  color:red;
  }
 </style>
