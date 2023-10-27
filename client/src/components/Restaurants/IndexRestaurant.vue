@@ -16,7 +16,7 @@
         <div class="button-group">
           <button v-on:click="navigateTo('/restaurant/' + restaurant.id)" class="view-button">View Details</button>
           <button v-on:click="navigateTo('/restaurant/edit/' + restaurant.id)" class="edit-button">Edit Info</button>
-          <button click="deleteRestaurant(restaurant)" class="delete-button">Delete Info</button>
+          <button v-on:click="deleteRestaurant(restaurant)" class="delete-button">Delete Info</button>
         </div>
       </div>
     </div>
