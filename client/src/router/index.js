@@ -7,19 +7,18 @@ import UserCreate from '@/components/Users/CreateUser'
 import UserEdit from '@/components/Users/EditUser'
 import UserShow from '@/components/Users/ShowUser'
 
-import UserEdittest1 from '@/components/Users/EditUsertest1'
 
 import Login from '@/components/Login'
+
+import RestaurantIndex from '@/components/Restaurants/IndexRestaurant'
+import RestaurantCreate from '@/components/Restaurants/CreateRestaurant'
+import RestaurantEdit from '@/components/Restaurants/EditRestaurant'
+import RestaurantShow from '@/components/Restaurants/ShowRestaurant'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/test1',
-      name: 'test1',
-      component: UserEdittest1
-    },
     {
       path: '/users',
       name: 'users',
@@ -44,6 +43,29 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    
+    
+
+    {
+      path: '/restaurants',
+      name: 'restaurants',
+      component: RestaurantIndex
+    },
+    {
+      path: '/restaurant/create',
+      name: 'restaurants-create',
+      component: RestaurantCreate
+    },
+    {
+      path: '/restaurant/edit/:restaurantId',
+      name: 'restaurants-edit',
+      component: RestaurantEdit
+    },
+    {
+      path: '/restaurant/:restaurantId',
+      name: 'restaurant',
+      component: RestaurantShow
     },
     
   ]

@@ -4,6 +4,8 @@ const isAuthenController = require('./authen/isAuthenController')
 
 const ShortController = require('./controllers/ShortController')
 
+const RestaurantController = require('./controllers/RestaurantController')
+
 module.exports = (app) => {
     /* RESFUL Api for users management */
     // get all user
@@ -25,6 +27,23 @@ module.exports = (app) => {
     app.post('/login',UserAuthenController.login)
 
 
+    // get all Restaurant
+    app.get('/restaurants',isAuthenController,RestaurantController.index),
+
+    // create Restaurant
+    app.post('/restaurant',RestaurantController.create),
+
+    // edit Restaurant
+    app.put('/restaurant/:restaurantId', RestaurantController.put)
+
+    // delete Restaurant
+    app.delete('/restaurant/:restaurantId',RestaurantController.remove)
+    
+    // get Restaurant by id
+    app.get('/restaurant/:restaurantId',RestaurantController.show)
+
+
+
     // get all short
     app.get('/shorts',ShortController.index),
 
@@ -37,7 +56,9 @@ module.exports = (app) => {
     // delete short
     app.delete('/short/:shortId',ShortController.remove)
     
-    // get short by id
+    // get shorts by id
     app.get('/short/:shortId',ShortController.show)
 
+
+    
 }
