@@ -36,6 +36,9 @@ import UsersService from '../../services/UsersService';
                 }catch (error) {
                     console.log(error)
                 }
+            },
+            navigateTo(route) {
+                this.$router.push(route)
             }
         }
     }
