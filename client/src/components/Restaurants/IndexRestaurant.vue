@@ -13,7 +13,7 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Name</th>
+          <th>Restaurant Name</th>
           <th>Address</th>
           <th>View Details</th>
           <th>Edit Info</th>

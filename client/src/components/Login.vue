@@ -1,7 +1,7 @@
 <template>
     <div class="login-container">
       <div class="login-form">
-        <h1 class="login-heading">Login!</h1>
+        <h1 class="login-heading">SingIn!</h1>
         <form v-on:submit.prevent="onLogin" class="form">
           <div class="form-group">
             <label for="username" class="form-label">Email</label>
@@ -12,8 +12,8 @@
             <input type="password" id="password" v-model="password" class="form-input">
           </div>
           <div class="button-group">
-          <button type="submit" class="singin-button">sing in</button>
-          <button v-on:click="navigateTo('/user/create')" class="singup-button">sing up</button>
+          <button type="submit" class="singin-button">Sing in</button>
+          <button v-on:click="navigateTo('/singup')" class="singup-button">Sing up</button>
           </div>
           <br>
           <div class="error" v-if="error">{{error}}</div>

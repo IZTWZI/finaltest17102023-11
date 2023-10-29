@@ -26,6 +26,8 @@ module.exports = (app) => {
 
     app.post('/login',UserAuthenController.login)
 
+    app.post('/singup',UserAuthenController.singup)
+
 
     // get all Restaurant
     app.get('/restaurants',isAuthenController,RestaurantController.index),

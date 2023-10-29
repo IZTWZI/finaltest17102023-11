@@ -7,7 +7,6 @@
         <p class="restaurant-info">Address: {{ restaurant.address }}</p>
         <p class="restaurant-info">Email: {{ restaurant.email }}</p>
         <p class="restaurant-info">Phone Number: {{ restaurant.phoneNumber }}</p>
-        <p class="restaurant-info">Status: {{ restaurant.status }}</p>
         <p class="restaurant-info">Opening Time: {{ restaurant.timeOn }}</p>
         <p class="restaurant-info">Closing Time: {{ restaurant.timeOff }}</p>
         <p class="restaurant-info">Menu Type: {{ restaurant.menuType }}</p>

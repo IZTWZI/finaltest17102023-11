@@ -1,10 +1,10 @@
 <template>
-  <div class="login-container">
-    <div class="login-form">
-      <h1 class="login-heading">Create User</h1>
+  <div class="SingUp-container">
+    <div class="SingUp-form">
+      <h1 class="SingUp-heading">SingUp!</h1>
       <form v-on:submit.prevent="createUser" class="form">
         <div class="form-group">
-          <label for="name" class="form-label">First Name</label>
+          <label for="name" class="form-label">Name</label>
           <input type="text" id="name" v-model="user.name" class="form-input" required>
         </div>
         <div class="form-group">
@@ -13,7 +13,7 @@
         </div>
         <div class="form-group">
           <label for="email" class="form-label">Email</label>
-          <input type="email" id="email" v-model="user.email" class="form-input" required>
+          <input type="text" id="email" v-model="user.email" class="form-input" required>
         </div>
         <div class="form-group">
           <label for="password" class="form-label">Password</label>
@@ -24,9 +24,10 @@
           <input type="password" id="confirmPassword" v-model="confirmPassword" class="form-input" required>
         </div>
 
+
         <div class="button-group">
-          <button type="submit" class="singin-button">Create User</button>
-          <button v-on:click="navigateTo('/users/')" class="singup-button">Back</button>
+          <button type="submit" class="singin-button">Sing up</button>
+          <button v-on:click="navigateTo('/login/')" class="singup-button">Back</button>
         </div>
         <br>
         <div class="error" v-if="error">{{ error }}</div>
@@ -36,9 +37,8 @@
 </template>
   
 <script>
-import UsersService from '../../services/UsersService';
+import UsersService from '@/services/UsersService';
 import AuthenService from '@/services/AuthenService'
-
 export default {
   data() {
     return {
@@ -48,38 +48,30 @@ export default {
         email: '',
         password: '',
         status: 'active',
-      },
-      error: null
+      }
     }
   },
   methods: {
     async createUser() {
-      if (this.user.password !== this.confirmPassword) {
+
+      /*if (this.user.password !== this.confirmPassword) {
         this.error = "Passwords don't match.";
         return;
-      }
+      }*/
       try {
-        const response = await AuthenService.singup({
-          name: this.user.name,
-          lastname: this.user.lastname,
-          email: this.user.email,
-          password: this.user.password,
-          status: this.user.status,
-        })
-        console.log(response)
+        const response = await AuthenService.login({
+                    email: this.email,
+                })
+                console.log(response)
 
+        
+        await UsersService.post(this.user)
         this.$router.push({
-          name: 'users'
+          name: 'login'
         })
       } catch (error) {
         console.log(error)
         this.error = error.response.data.error
-        this.user.name = '',
-        this.user.lastname = '',
-        this.user.email = '',
-        this.user.password = '',
-        this.user.status = 'active',
-        this.confirmPassword = ''
       }
     },
     navigateTo(route) {
@@ -89,14 +81,14 @@ export default {
 }
 </script>
 <style scoped>
-.login-container {
+.SingUp-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-.login-form {
+.SingUp-form {
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 5px;
@@ -106,7 +98,7 @@ export default {
   text-align: center;
 }
 
-.login-heading {
+.SingUp-heading {
   font-size: 24px;
   margin-bottom: 20px;
 }
@@ -133,7 +125,7 @@ export default {
 .singin-button {
   width: 48%;
   /* กำหนดความกว้างของปุ่ม Sing In */
-  background: #007bff;
+  background: #28a745;
   color: #fff;
   padding: 10px;
   border: none;
@@ -159,7 +151,7 @@ export default {
 }
 
 .singin-button:hover {
-  background: #0056b3;
+  background: #18662a;
 }
 
 .singup-button:hover {

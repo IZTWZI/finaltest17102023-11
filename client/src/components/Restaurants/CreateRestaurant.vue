@@ -16,7 +16,7 @@
         </div>
         <div class="form-group">
           <label for="phoneNumber">Phone Number:</label>
-          <input type="text" id="phoneNumber" v-model="restaurant.phoneNumber" class="form-input" placeholder="062xxxxxxx" pattern="\d{3}\d{3}\d{4}" required/>
+          <input type="text" id="phoneNumber" v-model="restaurant.phoneNumber" class="form-input" placeholder="062xxxxxxx" pattern="\d{3}\d{3}\d{4}" minlength="10" maxlength="10" required/>
         </div>
         <div class="form-group">
           <label for="timeOn">Opening Time:</label>
@@ -57,7 +57,6 @@ import RestaurantService from '../../services/RestaurantService';
                     address: '',
                     email: '',
                     phoneNumber: '',
-                    status: 'active',
                     timeOn: '',
                     timeOff: '',
                     menuType: '',

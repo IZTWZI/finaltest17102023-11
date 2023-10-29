@@ -9,6 +9,7 @@ import UserShow from '@/components/Users/ShowUser'
 
 
 import Login from '@/components/Login'
+import SingUp from '@/components/SingUp'
 
 import RestaurantIndex from '@/components/Restaurants/IndexRestaurant'
 import RestaurantCreate from '@/components/Restaurants/CreateRestaurant'
@@ -44,6 +45,13 @@ export default new Router({
       name: 'login',
       component: Login
     },
+    {
+      path: '/singup',
+      name: 'singup',
+      component: SingUp
+    },
+
+    
     
     
 

@@ -16,10 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(10),
       allowNull: false,
     },
-    status: {
-      type: DataTypes.STRING(10),
-      allowNull: false,
-    },
     timeOn: {
       type: DataTypes.TIME,
       allowNull: false,
