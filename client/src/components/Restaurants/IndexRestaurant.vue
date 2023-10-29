@@ -1,66 +1,211 @@
 <template>
-    <div class="restaurants-container">
-      <h2 class="restaurants-heading">All Restaurants</h2>
-      <div class="action-buttons">
-        <button v-on:click="logout" class="logout-button">Logout</button>
-        <button v-on:click="navigateTo('/restaurant/create/')" class="create-restaurant-button">Create Restaurant</button>
-      </div>
-      <h4>Total Restaurants: {{ restaurants.length }}</h4>
-      <div v-for="restaurant in restaurants" :key="restaurant.id" class="restaurant-card">
-        <p>ID: {{ restaurant.id }}</p>
-        <p>Name: {{ restaurant.name }}</p>
-        <p>Address: {{ restaurant.address }}</p>
-        <p>Email: {{ restaurant.email }}</p>
-        <p>Phone Number: {{ restaurant.phoneNumber }}</p>
-        <p>Status: {{ restaurant.status }}</p>
-        <div class="button-group">
-          <button v-on:click="navigateTo('/restaurant/' + restaurant.id)" class="view-button">View Details</button>
-          <button v-on:click="navigateTo('/restaurant/edit/' + restaurant.id)" class="edit-button">Edit Info</button>
-          <button v-on:click="deleteRestaurant(restaurant)" class="delete-button">Delete Info</button>
-        </div>
-      </div>
+  <div class="restaurants-container">
+    <div class="navbar">
+      <button v-on:click="navigateTo('/users/')" class="navbar-button-showUsers">Show Users</button>
+      <button v-on:click="navigateTo('/restaurant/create/')" class="navbar-button-createRe">Create Restaurant</button>
+      <button v-on:click="logout" class="navbar-button-logout">Logout</button>
     </div>
-  </template>
+    <h2 class="page-heading">All Restaurants</h2>
+    <h4 class="total-restaurants">Total Restaurants: {{ restaurants.length }}</h4>
+
+
+    <table class="restaurant-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>View Details</th>
+          <th>Edit Info</th>
+          <th>Delete Info</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(restaurant, index) in paginatedRestaurants" :key="restaurant.id">
+          <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
+          <td>{{ restaurant.name }}</td>
+          <td>{{ restaurant.address }}</td>
+          <td>
+            <button v-on:click="navigateTo('/restaurant/' + restaurant.id)" class="view-button">View Details</button>
+          </td>
+          <td>
+            <button v-on:click="navigateTo('/restaurant/edit/' + restaurant.id)" class="edit-button">Edit Info</button>
+          </td>
+          <td>
+            <button v-on:click="deleteRestaurant(restaurant)" class="delete-button">Delete Info</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button v-on:click="prevPage" class="pagination-button">Previous Page</button>
+      <div class="page-numbers">
+        <button
+          v-for="page in visiblePageNumbers"
+          :key="page"
+          @click="changePage(page)"
+          class="pagination-button"
+          :class="{ 'active-page': page === currentPage }"
+        >
+          {{ page }}
+        </button>
+      </div>
+      <p>Pages: {{ currentPage }}/{{ totalPages }}</p>
+      <button v-on:click="nextPage" class="pagination-button">Next Page</button>
+    </div>
+  </div>
+</template>
 
 <script>
 import RestaurantService from '@/services/RestaurantService';
+
 export default {
-    data() {
-        return {
-            restaurants: []
-        }
+  data() {
+    return {
+      restaurants: [],
+      currentPage: 1,
+      itemsPerPage: 5,
+      visiblePageNumbers: [],
+    };
+  },
+  computed: {
+    paginatedRestaurants() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.restaurants.slice(start, end);
     },
-    async created() {
-        this.restaurants = (await RestaurantService.index()).data
+    totalPages() {
+      return Math.ceil(this.restaurants.length / this.itemsPerPage);
     },
-    methods: {
-        logout() {
-            this.$store.dispatch('setToken', null)
-            this.$store.dispatch('setUser', null)
-            this.$router.push({
-                name: 'login'
-            })
-        },
-        navigateTo(route) {
-            this.$router.push(route)
-        },
-        async deleteRestaurant(restaurant) {
-            let result = confirm("Want to delete?")
-            if (result) {
-                try {
-                    await RestaurantService.delete(restaurant)
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-        },
-        async refreshData() {
-            this.users = (await RestaurantService.index()).data
+  },
+  async created() {
+    this.restaurants = (await RestaurantService.index()).data;
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('setToken', null);
+      this.$store.dispatch('setUser', null);
+      this.$router.push({
+        name: 'login',
+      });
+    },
+    navigateTo(route) {
+      this.$router.push(route);
+    },
+    async deleteRestaurant(restaurant) {
+      const result = confirm('Want to delete?');
+      if (result) {
+        try {
+          await RestaurantService.delete(restaurant);
+          this.restaurants = this.restaurants.filter((r) => r.id !== restaurant.id);
+        } catch (error) {
+          console.log(error);
         }
-    }
-}
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    changePage(page) {
+      this.currentPage = page;
+    },
+    updateVisiblePageNumbers() {
+      const maxVisiblePages = 5;
+      const halfVisiblePages = Math.floor(maxVisiblePages / 2);
+
+      if (this.totalPages <= maxVisiblePages) {
+        this.visiblePageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+      } else if (this.currentPage <= halfVisiblePages) {
+        this.visiblePageNumbers = Array.from({ length: maxVisiblePages }, (_, i) => i + 1);
+      } else if (this.currentPage >= this.totalPages - halfVisiblePages) {
+        this.visiblePageNumbers = Array.from({ length: maxVisiblePages }, (_, i) => this.totalPages - maxVisiblePages + i + 1);
+      } else {
+        this.visiblePageNumbers = Array.from({ length: maxVisiblePages }, (_, i) => this.currentPage - halfVisiblePages + i);
+      }
+    },
+  },
+};
 </script>
+
 <style scoped>
+/* สไตล์ CSS สำหรับแถบบา */
+.navbar {
+  background-color: #ffffff; /* สีพื้นหลังของแถบบา */
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+/* สไตล์ปุ่มในแถบบา */
+
+.navbar-button {
+  background-color: #ff9100; /* สีพื้นหลังของปุม */
+  color: #fff; /* สีข้อความ */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-left: 10px;
+}
+
+.navbar-button:hover {
+  background-color: #d77c04; /* สีพื้นหลังเมื่อนำเมาส์ผ่าน (hover) */
+}
+
+.navbar-button-showUsers {
+  background-color: #999; /* สีพื้นหลังของปุม */
+  color: #fff; /* สีข้อความ */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-left: 10px;
+}
+
+.navbar-button-createRe {
+  background-color: #999; /* สีพื้นหลังของปุม */
+  color: #fff; /* สีข้อความ */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-left: 10px;
+}
+
+.navbar-button-logout {
+  background-color: #999; /* สีพื้นหลังของปุม */
+  color: #fff; /* สีข้อความ */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-left: 10px;
+}
+
+.navbar-button-showUsers:hover {
+  background-color: #28a745; /* สีพื้นหลังเมื่อนำเมาส์ผ่าน (hover) */
+}
+
+.navbar-button-createRe:hover {
+  background-color: #007bff; /* สีพื้นหลังเมื่อนำเมาส์ผ่าน (hover) */
+}
+
+.navbar-button-logout:hover {
+  background-color: #dc3545; /* สีพื้นหลังเมื่อนำเมาส์ผ่าน (hover) */
+}
+
 .restaurants-container {
   display: flex;
   flex-direction: column;
@@ -72,48 +217,41 @@ export default {
   margin-bottom: 20px;
 }
 
-.action-buttons {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 400px;
-}
-
-.logout-button,
-.create-restaurant-button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.logout-button:hover,
-.create-restaurant-button:hover {
-  background-color: #0056b3;
-}
-
-.restaurant-card {
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  width: 100%;
-  max-width: 400px;
-  text-align: left;
+.page-heading {
+  font-size: 24px;
+  text-align: center;
   margin-top: 20px;
+}
+
+.total-restaurants {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.restaurant-table {
+  width:  90%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.restaurant-table th,
+.restaurant-table td {
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  text-align: left;
+}
+
+.restaurant-table th {
+  background-color: #f1f1f1;
 }
 
 .button-group {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
 }
 
-.view-button{
+.view-button {
   background-color: #28a745;
   color: #fff;
   padding: 5px 10px;
@@ -123,7 +261,7 @@ export default {
   transition: background 0.3s;
 }
 
-.edit-button{
+.edit-button {
   background-color: #edce1a;
   color: #fff;
   padding: 5px 10px;
@@ -143,15 +281,36 @@ export default {
   transition: background 0.3s;
 }
 
-.view-button:hover{
+.view-button:hover {
   background-color: #18662a;
 }
 
-.edit-button:hover{
+.edit-button:hover {
   background-color: #d1b518;
 }
 
 .delete-button:hover {
   background-color: #a02834;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin: 0 10px;
+}
+
+.pagination-button:hover {
+  background-color: #0056b3;
 }
 </style>

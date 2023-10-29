@@ -10,7 +10,7 @@ module.exports = (app) => {
     /* RESFUL Api for users management */
     // get all user
     //app.get('/users',isAuthenController,UserController.index),
-    app.get('/users',UserController.index),
+    app.get('/users',isAuthenController,UserController.index),
 
     // create user
     app.post('/user',UserController.create),

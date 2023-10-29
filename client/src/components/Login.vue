@@ -1,17 +1,21 @@
 <template>
     <div class="login-container">
       <div class="login-form">
-        <h1 class="login-heading">Admin Login</h1>
+        <h1 class="login-heading">Login!</h1>
         <form v-on:submit.prevent="onLogin" class="form">
           <div class="form-group">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" id="username" v-model="email" class="form-input" required>
+            <label for="username" class="form-label">Email</label>
+            <input type="text" id="username" v-model="email" class="form-input">
           </div>
           <div class="form-group">
             <label for="password" class="form-label">Password</label>
-            <input type="password" id="password" v-model="password" class="form-input" required>
+            <input type="password" id="password" v-model="password" class="form-input">
           </div>
-          <button type="submit" class="login-button">Login</button>
+          <div class="button-group">
+          <button type="submit" class="singin-button">sing in</button>
+          <button v-on:click="navigateTo('/user/create')" class="singup-button">sing up</button>
+          </div>
+          <br>
           <div class="error" v-if="error">{{error}}</div>
         </form>
       </div>
@@ -49,6 +53,9 @@ export default {
                 this.email = ''
                 this.password = ''
             }
+        },
+        navigateTo(route) {
+          this.$router.push(route)
         }
     }
 }
@@ -68,7 +75,7 @@ export default {
   border: 1px solid #e0e0e0;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 30px;
   width: 300px;
   text-align: center;
 }
@@ -91,19 +98,43 @@ export default {
   margin-bottom: 15px;
 }
 
-.login-button {
-  width: 100%;
-  background: #007bff;
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.singin-button {
+  width: 48%; /* กำหนดความกว้างของปุ่ม Sing In */
+  background: #28a745;
   color: #fff;
   padding: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s;
+  margin-right: 10px; /* เพิ่มระยะห่างขาดไปทางขวาของปุ่ม Sing In */
 }
 
-.login-button:hover {
-  background: #0056b3;
+.singup-button {
+  width: 48%; /* กำหนดความกว้างของปุ่ม Sing Up */
+  background: #edce1a;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-left: 10px; /* เพิ่มระยะห่างขาดไปทางซ้ายของปุ่ม Sing Up */
+}
+
+
+.singin-button:hover {
+  background: #18662a;
+}
+
+.singup-button:hover {
+  background: #d1b518;
 }
 
 .error {
